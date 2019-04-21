@@ -18,7 +18,10 @@ const save = ({tokenId, pngUrl}) => {
 
 const fetch = ({tokenId}) => {
     console.log(`fetch object by ${tokenId}`);
-    return photoQuery.equalTo('tokenId', tokenId).find();
+    return new Promise((resolver) => {
+        return resolver(["hello world"])
+    });
+    // return photoQuery.equalTo('tokenId', tokenId).find();
 }
 
 module.exports = {save, fetch};

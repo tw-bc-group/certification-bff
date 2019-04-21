@@ -1,17 +1,12 @@
-const https = require("https")
-const fs = require("fs")
 const express = require("express")
 const axios = require("axios")
 const Web3 = require("web3")
 const app = express()
 const cors = require("cors")
-const storage = requre('./storage')
+const https = require('./https')
+const storage = require('./storage')
 const port = 3000
 
-var privateKey  = fs.readFileSync('./privkey.pem', 'utf8');
-var certificate = fs.readFileSync('./cert.pem', 'utf8');
-
-var credentials = {key: privateKey, cert: certificate};
 
 app.use(cors())
 app.use(express.json({limit: '5mb'}))
@@ -20,8 +15,7 @@ app.use(express.static('dist'))
 app.get('/winners/:hashedIdCardNumber', (req, res) => getWinner(req.params.hashedIdCardNumber).then(r => res.send(r)))
 app.get('/certifications/:hashedIdCardNumber', (req, res) => getCertification(req.params.hashedIdCardNumber).then(r => res.send(r)))
 
-var httpsServer = https.createServer(credentials, app)
-httpsServer.listen(port)
+https(app, port, () => console.log(`https server listen on port ${port}`));
 
 const web3 = new Web3()
 
@@ -103,7 +97,7 @@ app.post('/photos', function (req, res) {
 })
 
 app.get("/photos/:tokenId", (req, res) => {
-  storage.fetch(req.params.tokenId).then(results => {
+  storage.fetch({tokenId: req.params.tokenId}).then(results => {
     res.send(results[0]);
   });
 });
