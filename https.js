@@ -1,5 +1,5 @@
-const https = require("https")
-const fs = require("fs")
+const https = require("https");
+const fs = require("fs");
 
 const wrap = (app, port, listener) => {
   const privateKey = fs.readFileSync("./privkey.pem", "utf8");
@@ -9,7 +9,7 @@ const wrap = (app, port, listener) => {
 
   const httpsServer = https.createServer(credentials, app);
   listener();
-  httpsServer.listen(port)
+  httpsServer.listen(port);
 };
 
 module.exports = wrap;
