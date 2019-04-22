@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { getWinner, getCertification } = require("./proxy");
+const { getCertification } = require("./proxy");
 const https = require("./https");
 const storage = require("./storage");
 const port = 3000;
@@ -13,8 +13,8 @@ app.use(express.static("dist"));
 
 https(app, port, () => console.log(`https server listen on port ${port}`));
 
-app.get("/certifications/:hasedCertificationId", (req, res) =>
-  getCertification(req.params.hasedCertificationId).then(r => res.send(r))
+app.get("/certifications/:hashedCertificationId", (req, res) =>
+  getCertification(req.params.hashedCertificationId).then(r => res.send(r))
 );
 
 app.post("/photos", function(req, res) {
@@ -26,8 +26,8 @@ app.post("/photos", function(req, res) {
     );
 });
 
-app.get("/photos/:hasedCertificationId", (req, res) => {
-  storage.fetch({ tokenId: req.params.hasedCertificationId }).then(results => {
+app.get("/photos/:hashedCertificationId", (req, res) => {
+  storage.fetch({ tokenId: req.params.hashedCertificationId }).then(results => {
     res.send(results[0]);
   });
 });
