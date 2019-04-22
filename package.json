@@ -1,7 +1,7 @@
 {
-  "name": "proxy",
+  "name": "CAC BFF",
   "version": "1.0.0",
-  "description": "proxy for tw cac",
+  "description": "BFF for tw cac",
   "main": "index.js",
   "scripts": {
     "test": "npm test",
