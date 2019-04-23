@@ -323,6 +323,12 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
 
+config@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/config/-/config-3.1.0.tgz#c7d49c4171e8f6cb61c1d69e22647ffd60492548"
+  dependencies:
+    json5 "^1.0.1"
+
 content-disposition@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/content-disposition/-/content-disposition-0.5.2.tgz#0cf68bb9ddf5f2be7961c3a85178cb85dba78cb4"
@@ -1109,6 +1115,12 @@ json-stringify-safe@~5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
 
+json5@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/json5/-/json5-1.0.1.tgz#779fb0018604fa854eacbf6252180d83543e3dbe"
+  dependencies:
+    minimist "^1.2.0"
+
 jsonfile@^2.1.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-2.4.0.tgz#3736a2b428b87bbda0cc83b53fa3d633a35c2ae8"
@@ -1273,6 +1285,10 @@ minimatch@^3.0.4:
 minimist@0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.0.8.tgz#857fcabfc3397d2625b8228262e86aa7a011b05d"
+
+minimist@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
 
 mkdirp-promise@^5.0.1:
   version "5.0.1"

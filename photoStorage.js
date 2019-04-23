@@ -1,8 +1,9 @@
 const AV = require("leancloud-storage");
+const config = require("config");
 
 AV.init({
-  appId: "Uukre5SsX3nQdSzBXKnsTfVp-gzGzoHsz",
-  appKey: "u2cMVwGvQrBUMfO5pMv5kvC1"
+  appId: config.get("leancloud.appId"),
+  appKey: config.get("leancloud.appKey")
 });
 
 const LEANCLOUD_CLASS = "Photo";
