@@ -30,7 +30,7 @@ app.get("/photos/:certId", (req, res, next) => {
     if (results.length > 0) {
       res.send(results[0]);
     } else {
-      next(`No photos found for ${req.params.certId}`);
+      res.status(404).send(`No photos found for ${req.params.certId}`);
     }
   });
 });
