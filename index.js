@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { getCertification } = require("./proxy");
 const https = require("./https");
-const storage = require("./storage");
+const storage = require("./photoStorage");
 const port = 3000;
 
 const app = express();
@@ -18,16 +18,17 @@ app.get("/certifications/:hashedCertificationId", (req, res) =>
 );
 
 app.post("/photos", function(req, res) {
-  storage
-    .save(req.body)
-    .then(
-      photo => res.send({ message: `photo created with id ${photo.id}` }),
-      console.err
-    );
+  storage.save(req.body).then(urls => {
+    res.send(urls);
+  }, console.err);
 });
 
-app.get("/photos/:hashedCertificationId", (req, res) => {
-  storage.fetch({ tokenId: req.params.hashedCertificationId }).then(results => {
-    res.send(results[0]);
+app.get("/photos/:certId", (req, res, next) => {
+  storage.fetch({ certId: req.params.certId }).then(results => {
+    if (results.length > 0) {
+      res.send(results[0]);
+    } else {
+      next(`No photos found for ${req.params.certId}`);
+    }
   });
 });
