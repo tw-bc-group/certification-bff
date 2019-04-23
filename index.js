@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const history = require('connect-history-api-fallback');
 const { getCertification } = require("./proxy");
 const https = require("./https");
 const storage = require("./photoStorage");
@@ -8,6 +9,7 @@ const port = 3000;
 const app = express();
 
 app.use(cors());
+app.use(history());
 app.use(express.json({ limit: "5mb" }));
 app.use(express.static("dist"));
 
