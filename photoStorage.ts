@@ -1,5 +1,5 @@
-const AV = require("leancloud-storage");
-const config = require("config");
+import AV from "leancloud-storage";
+import config from "config";
 
 AV.init({
   appId: config.get("leancloud.appId"),
@@ -9,7 +9,22 @@ AV.init({
 const LEANCLOUD_CLASS = "Photo";
 const INDEX = "certId";
 
-const save = ({ certId, photos }) => {
+export const fetch: ({ certId }: { certId: string }) => Promise<Object[]> = ({
+  certId
+}) => {
+  var query = new AV.Query(LEANCLOUD_CLASS);
+  query.equalTo(INDEX, certId);
+  query.include(["png", "svg"]);
+  return query.find();
+};
+
+export const save: ({
+  certId,
+  photos
+}: {
+  certId: string;
+  photos: Array<{ fileName: string; dataUrl: string }>;
+}) => Promise<{ pngUrl: string; svgUrl: string }> = ({ certId, photos }) => {
   const mark = "base64,";
   const [png, svg, ...tail] = photos.map(({ fileName, dataUrl }) => {
     const data = dataUrl.substring(dataUrl.indexOf(mark) + mark.length);
@@ -34,12 +49,3 @@ const save = ({ certId, photos }) => {
       return { pngUrl, svgUrl };
     });
 };
-
-const fetch = ({ certId }) => {
-  var query = new AV.Query(LEANCLOUD_CLASS);
-  query.equalTo(INDEX, certId);
-  query.include(["png", "svg"]);
-  return query.find();
-};
-
-module.exports = { save, fetch };
