@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosError } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import Web3 = require("web3");
 
 const web3 = new Web3();
@@ -28,7 +28,7 @@ const axiosConfig: AxiosRequestConfig = {
 
 const target = axios.create(axiosConfig);
 
-function encodingFunc(funcName: string, hashedCertificationId: string) {
+function encodingFunc(funcName: string, hashedCertificationId: string): string {
   return web3.eth.abi.encodeFunctionCall(
     {
       name: funcName,
@@ -40,53 +40,40 @@ function encodingFunc(funcName: string, hashedCertificationId: string) {
 }
 
 interface Certification {
-    subject: string,
-    firstName: string,
-    lastName: string,
-    issueDate: string,
-    expireDate: string,
-    additionalData: any
+  subject: string;
+  firstName: string;
+  lastName: string;
+  issueDate: string;
+  expireDate: string;
+  additionalData: any;
 }
 
-export const getCertification: (hashedCertificationId: string) => Promise<Certification> = (hashedCertificationId: string) => {
+export const getCertification: (
+  hashedCertificationId: string
+) => Promise<Certification> = async (hashedCertificationId: string) => {
   console.log(`Get certification by ${hashedCertificationId}`);
-  return target
+  const res = await target
     .get("/api", {
       params: {
         data: encodingFunc("certifications", hashedCertificationId)
       }
-    })
-    .then(res => {
-      const cert = web3.eth.abi.decodeParameters(
-        [
-          { name: "subject", type: "string" },
-          { name: "firstName", type: "string" },
-          { name: "lastName", type: "string" },
-          { name: "issueDate", type: "uint64" },
-          { name: "expireDate", type: "uint64" },
-          { name: "additionalData", type: "string" }
-        ],
-        res.data.result
-      );
-
-      let {
-        subject,
-        firstName,
-        lastName,
-        issueDate,
-        expireDate,
-        additionalData
-      } = cert;
-
-      additionalData = JSON.parse(additionalData);
-
-      return {
-        subject,
-        firstName,
-        lastName,
-        issueDate,
-        expireDate,
-        additionalData
-      }
-    })
+    });
+  const cert = web3.eth.abi.decodeParameters([
+    { name: "subject", type: "string" },
+    { name: "firstName", type: "string" },
+    { name: "lastName", type: "string" },
+    { name: "issueDate", type: "uint64" },
+    { name: "expireDate", type: "uint64" },
+    { name: "additionalData", type: "string" }
+  ], res.data.result);
+  let { subject, firstName, lastName, issueDate, expireDate, additionalData } = cert;
+  additionalData = JSON.parse(additionalData);
+  return {
+    subject,
+    firstName,
+    lastName,
+    issueDate,
+    expireDate,
+    additionalData
+  };
 };
