@@ -2,10 +2,10 @@
   "name": "CAC",
   "version": "1.0.0",
   "description": "BFF for tw cac",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "test": "npm test",
-    "start": "node index.js"
+    "test": "yarn test",
+    "start": "yarn tsc & node build/index.js"
   },
   "keywords": [
     "web3"
