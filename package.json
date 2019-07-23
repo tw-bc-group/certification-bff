@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "test": "yarn test",
-    "start": "yarn tsc & node build/index.js"
+    "start": "yarn tsc & copyfiles config/* *.pem build & node build/index.js"
   },
   "keywords": [
     "web3",
@@ -28,6 +28,7 @@
     "@types/connect-history-api-fallback": "^1.3.2",
     "@types/cors": "^2.8.5",
     "@types/express": "^4.16.1",
-    "@types/web3": "^1.0.18"
+    "@types/web3": "^1.0.18",
+    "copyfiles": "^2.1.1"
   }
 }
