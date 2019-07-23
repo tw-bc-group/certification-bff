@@ -1,6 +1,5 @@
 import express, { Application } from "express";
 import cors = require("cors");
-import history = require("connect-history-api-fallback");
 import { getCertification } from "./proxy";
 import { server } from "./https";
 import { fetch, save } from "./photoStorage";
@@ -9,9 +8,7 @@ const port = 3000;
 const app: Application = express();
 
 app.use(cors());
-app.use(history());
 app.use(express.json({ limit: "5mb" }));
-app.use(express.static("dist"));
 
 server(app, port, () => console.log(`https server listen on port ${port}`));
 
