@@ -1,0 +1,70 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2.1
+orbs:
+  aws-ecr: circleci/aws-ecr@6.1.0
+  aws-cli: circleci/aws-cli@0.1.13
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8.12.0
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      # run tests!
+      - run: yarn lint
+      # run build!
+      - run: yarn build
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+          # taken to be the root directory of the workspace.
+          root: ~/repo
+          paths:
+            - dist
+  deploy:
+    docker:
+      - image: circleci/python:3.7
+    steps:
+      - aws-cli/install
+      - run: aws ssm send-command --document-name "AWS-RunShellScript" --instance-ids "i-03aa0fbc7e233d6c4" --parameters commands=["(docker stop certificate-bff || true) && docker image prune -af && docker pull ${AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME}/${AWS_RESOURCE_NAME_PREFIX_CERTIFICATION_BFF}:${CIRCLE_WORKFLOW_ID} && docker run --rm -d --name certificate-bff -p 3000:3000 ${AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME}/${AWS_RESOURCE_NAME_PREFIX_CERTIFICATION_MANAGEMENT}:${CIRCLE_WORKFLOW_ID}"]
+
+workflows:
+  build-and-deploy:
+    jobs:
+      - build
+      - aws-ecr/build-and-push-image:
+          region: AWS_DEFAULT_REGION
+          account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
+          repo: "${AWS_RESOURCE_NAME_PREFIX_CERTIFICATION_BFF}"
+          tag: "${CIRCLE_WORKFLOW_ID}"
+          attach-workspace: true
+          requires:
+            - build
+      - deploy:
+          requires:
+            - aws-ecr/build-and-push-image

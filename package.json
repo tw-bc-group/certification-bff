@@ -6,7 +6,8 @@
   "scripts": {
     "test": "yarn test",
     "build": "yarn tsc & copyfiles config/* *.pem build",
-    "start": "node build/index.js"
+    "start": "node build/index.js",
+    "prod:start": "node index.js"
   },
   "keywords": [
     "web3",
