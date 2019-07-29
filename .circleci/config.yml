@@ -37,7 +37,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: yarn lint
+#      - run: yarn lint
       # run build!
       - run: yarn build
       - persist_to_workspace:
